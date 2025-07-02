@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Ever Bloom is online shop with Handmade decorations for your home and more.">
+
+    <link rel="icon" href="img/logo/Logo.png">
+    <link rel="apple-touch-icon" href="img/logo/Logo.png">
+    <link rel="manifest" href="manifest.webmanifest">
+
+    <link rel="stylesheet" href="style2.css">
+    <link rel="stylesheet" href="queries2.css">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <title>Ever Bloom &mdash; Handmade decorations for your home and more.</title>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+
+    <!-- emailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+    </script>
+    <script type="text/javascript">
+        (function () {
+            emailjs.init({
+                publicKey: "kUTJZaCfzKWsGmMnU",
+            });
+        })();
+    </script>
+    <!-- Cookies -->
+    <script>
+        function handleCookieConsent(accepted) {
+            if (accepted) {
+                localStorage.setItem('cookieConsent', 'accepted');
+            } else {
+                localStorage.setItem('cookieConsent', 'declined');
+            }
+            document.getElementById('cookie-banner').style.display = 'none';
+        }
+
+        window.onload = function () {
+            const consent = localStorage.getItem('cookieConsent');
+            if (!consent) {
+                document.getElementById('cookie-banner').style.display = 'block';
+            }
+        };
+    </script>
+</head>
+
+<body id="home">
+    <header class="header nav-open">
+        <a href="#home"><img class="nav-logo" src="img/logo/Logo.png" alt="EveryBloom logo"></a>
+        <nav class="main-nav">
+            <ul class="main-nav-list">
+                <li><a class="nav-link" href="#home">Home</a> </li>
+                <li><a class="nav-link" href="#shop">Shop</a> </li>
+                <li><a class="nav-link" href="#about">About</a> </li>
+                <li><a class="nav-link" href="#contact">Contact</a> </li>
+            </ul>
+
+        </nav>
+        <button class="btn-mobile-nav">
+            <ion-icon class="icon-mobile-nav" name="menu-outline"></ion-icon>
+            <ion-icon class="icon-mobile-nav red" name="close-outline"></ion-icon>
+        </button>
+    </header>
+
+    <section class="hero">
+
+        <div class="heder-container-inner">
+            <div class="wrapper">
+                <h1 class="heading--primary">EverBloom
+                </h1>
+
+                <p class="heading--text">Discover Timeless Treasures at EverBloom – Your Destination for Unique,
+                    Handcrafted Goods. Shop Now and Let Your Story Unfold!</p>
+            </div>
+        </div>
+
+        <div class="image-wrapper">
+            <img src="img/hero/Ever-Bloom--hero.03.jpeg" class="hero--image"
+                alt="A wooden table with decorations: a vase with colorful flowers, a wooden lamp with a bulb, a white cup on a saucer, a wooden box, a frame with a landscape painting, several rings, a bracelet, and a necklace in an open wooden frame.">
+        </div>
+    </section>
+
+    <!-- Shop section -->
+
+    <section id="shop" class="section-shop container">
+        <h2 class="shop--heading">Explore Our Collection</h2>
+        <p class="shop--introduction">Dive into EverBloom’s curated selection of handcrafted products. From elegant home
+            decor to thoughtful gifts,
+            find items that inspire and delight. Shop now and bring a touch of artistry to your life.</p>
+        <div class="container-grid container-grid--four margin-bottom--96">
+        </div>
+
+        <!--Feature -->
+
+        <div class="container-grid feature-section">
+
+            <div class="feature">
+                <ion-icon class="feature-icon" name="leaf-outline"></ion-icon>
+                <p class="feature-title">Recycled materials</p>
+                <p class="feature-text">Discover the beauty of sustainability with our recycled materials. Made from
+                    repurposed resources, our products reduce waste and promote eco-friendly living. Join us in making a
+                    positive impact!
+                </p>
+            </div>
+            <div class="feature">
+                <ion-icon class="feature-icon" name="hand-left-outline"></ion-icon>
+                <p class="feature-title">Unique Craftsmanship</p>
+                <p class="feature-text">Explore the art of unique craftsmanship with our handcrafted treasures. Each
+                    piece is meticulously designed to showcase individuality and timeless quality. Perfect for those who
+                    value originality!
+                </p>
+
+            </div>
+            <div class="feature">
+                <ion-icon class="feature-icon" name="water-outline"></ion-icon>
+                <p class="feature-title">Sustainable Materials</p>
+                <p class="feature-text">Embrace eco-conscious living with our sustainable materials. Sourced
+                    responsibly, these materials minimize environmental impact while offering durability and style.
+                    Perfect for a greener future!
+                </p>
+            </div>
+            <div class="feature">
+                <ion-icon name="hourglass-outline" class="feature-icon"></ion-icon>
+                <p class="feature-title">Timeless Designs</p>
+                <p class="feature-text">Our products blend modern aesthetics with classic charm.
+                    Shop with confidence, knowing you’re supporting creativity and sustainability.
+                </p>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- About me section -->
+    <section id="about" class="section-about-me container">
+        <h2 class="about-me--heading ">About EverBloom</h2>
+        <div class="container-flex">
+            <div class="about-box">
+                <img class="about-image" src="img/hero/Ever-Bloom--hero.04.jpeg"
+                    alt="A table with decorations: an elegant cup with a saucer, a carved wooden box, a vase with pink flowers, a table lamp with a white shade, a glass of water, a wooden stand with a ring, a painting with a floral motif on the wall, and a few books in the background.">
+            </div>
+            <div class="container-about-me">
+                <div class="about-me--text">
+                    <p> At EverBloom, we believe in the power of creativity to tell stories and connect people. Founded
+                        with a passion for craftsmanship, our online store brings you a curated collection of
+                        handcrafted goods, from intricate jewelry to bespoke home decor. Each piece is made with love,
+                        using sustainable materials to ensure beauty that lasts. Our mission is to inspire joy and
+                        individuality through unique designs that resonate with your personal style. Join us in
+                        celebrating artistry and authenticity. </p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!--gallery-->
+    <div class="gallery-container container">
+        <h2 class="gallery--heading">Moments of Beauty</h2>
+        <div class="gallery">
+            <div class='gallery-wrapper'>
+                <div class="gallery-img">
+                </div>
+            </div>
+            <div class="qot">
+
+                <p> Step into the world of EverBloom through our gallery. Each image captures the essence of our
+                    handcrafted creations, showcasing their intricate details and timeless charm. Let these visuals
+                    inspire your next favorite find. </p>
+
+                <blockquote> “Every piece at EverBloom tells a story – yours to discover and cherish.” <br>
+                </blockquote>
+
+            </div>
+        </div>
+    </div>
+
+    <!--Call to action-->
+    <section id="contact" class="section-cta container">
+        <div class="container-grid">
+            <div class="cta">
+                <div class="cta-text-box">
+                    <h2 class="cta-heading">Contact</h2>
+                    <p class="cta-text">If you have any questions or issues with your order or product, please get in
+                        touch.
+                    </p>
+
+                    <form id="contact-form" class="cta-form">
+                        <div>
+                            <label for="name">Full Name</label>
+                            <input id="name" type="text" placeholder="John Smith" required>
+                        </div>
+                        <div>
+                            <label for="email">Email address</label>
+                            <input id="email" type="email" placeholder="me@example.com" required>
+                        </div>
+                        <div>
+                            <label for="subject">Subject</label>
+                            <input id="subject" type="text" placeholder="Subject" required>
+                        </div>
+
+                        <div>
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" placeholder="Message..." required></textarea>
+                        </div>
+                        <button class="btn btn--form" type="submit">Send message</button>
+                    </form>
+                </div>
+                <div class="cta-img-box" role="img" aria-label="Image of Violet flowers"></div>
+            </div>
+        </div>
+    </section>
+
+
+    <!--Payments icons-->
+    <div class="payments-container">
+
+        <div class="wrap--payments">
+            <h4 class="payments--heading">secure payment methods</h4>
+            <div class="payments-methods-box">
+                <div class="logos-payments-methods">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Footer-->
+    <footer>
+        <div class="container-grid center-item footer-container container">
+            <div class="social footer-box">
+                <img class="footer-logo" src="img/logo/Logo.png" alt="EveryBloom logo">
+                <ul class="social-lists">
+                    <li> <a href="#"> <ion-icon class="tag-icon" name="logo-twitter"></ion-icon> <span
+                                class="coming-soon">Coming soon</span></a></li>
+                    <li> <a href="#"> <ion-icon class="tag-icon" name="logo-facebook"></ion-icon> <span
+                                class="coming-soon">Coming soon</span></a></li>
+                    <li> <a href="#"> <ion-icon class="tag-icon" name="logo-instagram"></ion-icon> <span
+                                class="coming-soon">Coming soon</span></a></li>
+                    <li> <a href="mailto:michal.aleksiejew@gmail.com"> <ion-icon class="tag-icon"
+                                name="mail-outline"></ion-icon> </a>
+                    </li>
+                </ul>
+                <p class="copyright footer-text"> Copyright © <span class="year">2024</span> <a href="#home">Ever
+                        Bloom.com</a>.All Rights
+                    Reserved.</p>
+            </div>
+
+            <div class="contact-us footer-box">
+                <p class="heading-footer">Contact Me</p>
+                <address>
+                    <p>99 Ever bloom way, Bristol, BL0 0MM</p>
+                    <p><a href="tel:+442079460000">tel num +44 20 7946 0000</a></p>
+                    <p><a href="mailto:michal.aleksiejew@gmail.com">ever-bloom@gmail.com</a></p>
+
+                </address>
+            </div>
+
+            <div class="text footer-box">
+                <p class="heading-footer"> Information </p>
+                <ul class="footer-lists">
+                    <li class="footer-list"><a href="delivery.html">Delivery</a></li>
+                    <li class="footer-list"><a href="cookie.html">Cookie Policy</a></li>
+                </ul>
+            </div>
+
+            <div class="support-box footer-box">
+                <p class="heading-footer"> Support </p>
+                <ul class="footer-lists">
+                    <li class="footer-list"><a href="#contact">Contact Me</a></li>
+                    <li class="footer-list"><a href="returns-policy.html">Returns Policy</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </footer>
+    <script src="products.js"></script>
+    <script src="main.js"></script>
+
+
+    <div id="cookie-banner" style="display: none;">
+        <div class="cookie-banner-content">
+            <p>We use cookies to improve your experience. By clicking "Accept", you agree to the use of all cookies. You
+                can choose "Decline" to reject non-essential cookies. <a href="cookie.html" target="_blank">Learn
+                    more</a>.</p>
+            <div class="cookie-buttons">
+                <button onclick="handleCookieConsent(true)">Accept</button>
+                <button onclick="handleCookieConsent(false)">Decline</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

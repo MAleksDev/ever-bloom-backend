@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Ever Bloom is online shop with Handmade decorations for your home and more.">
+    <link rel="icon" href="img/logo/Logo.png">
+    <link rel="apple-touch-icon" href="img/logo/Logo.png">
+    <link rel="manifest" href="manifest.webmanifest">
+
+    <link rel="stylesheet" href="subpage.css">
+    <link rel="stylesheet" href="subpage-queries.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <title>Ever Bloom &mdash; Handmade decorations for your home and more</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <!-- Environment Warning -->
+    <script>
+        function warningConsent() {
+            document.querySelector('.warning-banner').style.display = 'none';
+        }
+    </script>
+
+</head>
+
+<body>
+    <header id="home" class="header nav-open">
+        <a href="index.html#home"><img class="nav-logo" src="img/logo/Logo.png" alt="EveryBloom logo"></a>
+        <nav class="main-nav">
+            <ul class="main-nav-list">
+                <li><a class="nav-link" href="index.html#home">Home</a> </li>
+                <li><a class="nav-link" href="index.html#shop">Shop</a> </li>
+                <li><a class="nav-link" href="index.html">About</a> </li>
+
+                <li><a class="nav-link" href="index.html#contact">Contact</a> </li>
+            </ul>
+
+        </nav>
+        <button class="btn-mobile-nav">
+            <ion-icon class="icon-mobile-nav" name="menu-outline"></ion-icon>
+            <ion-icon class="icon-mobile-nav red" name="close-outline"></ion-icon>
+        </button>
+    </header>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-2">
+                <div class="single-img">
+                    <img src="img/products/product-01/product-1.jpg" alt="Product image" class="product-img">
+                </div>
+                <div class="small-img-row">
+                </div>
+            </div>
+
+            <div class="col-2">
+                <!-- <p class="type">
+                  Product type
+                </p> -->
+                <h1 class="product-name">
+                    Product name.
+                </h1>
+                <div class="price--wrapper">
+
+
+                    <p class="product-price">
+                        Product price
+                    </p>
+
+                    <button class="btn buy-btn" data-product="" data-price="">Buy</button>
+
+                </div>
+                <h3>Product details:</h3>
+                <p class="product-description">Description</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Other products slider -->
+    <div class="subpage">
+        <h1 class="sub-header">See also:</h1>
+        <div class="sub-box">
+            <button class="btn-left btn-slide"><ion-icon name="chevron-back-outline"
+                    class="sub-icon"></ion-icon></button>
+            <div class="slider">
+            </div>
+            <button class="btn-right btn-slide"><ion-icon name="chevron-forward-outline"
+                    class="sub-icon"></ion-icon></button>
+        </div>
+    </div>
+
+    <!--Payments icons-->
+    <div class="payments-container">
+
+        <div class="wrap--payments">
+            <h4 class="payments--heading">secure payment methods</h4>
+            <div class="payments-methods-box">
+                <div class="logos-payments-methods">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Footer-->
+   <footer>
+        <div class="container-grid center-item footer-container container">
+            <div class="social footer-box">
+                <img class="footer-logo" src="img/logo/Logo.png" alt="EveryBloom logo">
+                <ul class="social-lists">
+                    <li> <a href="#"> <ion-icon class="tag-icon" name="logo-twitter"></ion-icon> <span
+                                class="coming-soon">Coming soon</span></a></li>
+                    <li> <a href="#"> <ion-icon class="tag-icon" name="logo-facebook"></ion-icon> <span
+                                class="coming-soon">Coming soon</span></a></li>
+                    <li> <a href="#"> <ion-icon class="tag-icon" name="logo-instagram"></ion-icon> <span
+                                class="coming-soon">Coming soon</span></a></li>
+                    <li> <a href="mailto:michal.aleksiejew@gmail.com"> <ion-icon class="tag-icon"
+                                name="mail-outline"></ion-icon> </a>
+                    </li>
+                </ul>
+                <p class="copyright footer-text"> Copyright © <span class="year">2024</span> <a href="#home">Ever
+                        Bloom.com</a>.All Rights
+                    Reserved.</p>
+            </div>
+
+            <div class="contact-us footer-box">
+                <p class="heading-footer">Contact Me</p>
+                <address>
+                    <p>99 Ever bloom way, Bristol, BL0 0MM</p>
+                    <p><a href="tel:+442079460000">tel num +44 20 7946 0000</a></p>
+                    <p><a href="mailto:michal.aleksiejew@gmail.com">ever-bloom@gmail.com</a></p>
+
+                </address>
+            </div>
+
+            <div class="text footer-box">
+                <p class="heading-footer"> Information </p>
+                <ul class="footer-lists">
+                    <li class="footer-list"><a href="delivery.html">Delivery</a></li>
+                    <li class="footer-list"><a href="cookie.html">Cookie Policy</a></li>
+                </ul>
+            </div>
+
+            <div class="support-box footer-box">
+                <p class="heading-footer"> Support </p>
+                <ul class="footer-lists">
+                    <li class="footer-list"><a href="#contact">Contact Me</a></li>
+                   <li class="footer-list"><a href="returns-policy.html">Returns Policy</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </footer>
+
+    <!--Popup image-->
+    <div class="popup-image" style="display: none;">
+        <span>&times;</span>
+        <img src="" alt="popup">
+    </div>
+
+    <!-- Environment Warning -->
+    <div class="warning-banner">
+        <div class="warning-banner-content">
+            <h1>⚠️ Test Environment Warning</h1>
+            <p>You are currently browsing a <span> demo version</span> of an online store created for educational and
+                portfolio purposes only. This is <span> not a real shop</span>, and no real purchases can be made on
+                this website.</p>
+            <p>Please <span> do not enter any real personal, payment, or sensitive information.</span></p>
+            <p>If you wish to test the checkout process, you can use the following <span> test credit card number
+                </span> provided by Stripe:</p>
+            <p>Test card: <span class="test-card">4242 4242 4242 4242</span></p>
+            <p>(Any future expiration date and any 3-digit CVC will work.)</p>
+            <p>Thank you for your understanding!</p>
+
+            <button onclick="warningConsent()">I understood</button>
+        </div>
+    </div>
+
+
+    <script src="products.js"></script>
+    <script src="subpage.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,262 @@
+
+/* < 1360px */
+@media (max-width: 85em) {
+	html {
+		font-size: 60%;
+	}
+	.container {
+		max-width: 120rem;
+	}
+	footer {
+		padding: 1.6rem;
+	}
+}
+
+/* < 1200px */
+@media (max-width: 75em) {
+	html {
+		font-size: 56.25%;
+	}
+	.row {
+		gap: 2rem;
+	}
+	.payments--heading {
+		font-size: 1.6rem;
+	}
+}
+
+/* < 944px */
+@media (max-width: 59em) {
+	html {
+		font-size: 50%;
+	}
+
+	/* --- NAV MOBILE --- */
+	.btn-mobile-nav {
+		display: block;
+		z-index: 1001;
+	}
+
+	.main-nav {
+		background-color: rgba(255, 255, 255, 0.95);
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100vh;
+		transform: translateX(100%);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: transform 0.5s ease-in;
+		opacity: 0;
+		pointer-events: none;
+		z-index: 1000;
+	}
+
+	.nav-open .main-nav {
+		opacity: 1;
+		pointer-events: auto;
+		transform: translateX(0);
+	}
+	.nav-open .icon-mobile-nav[name='close-outline'] {
+		display: block;
+	}
+	.nav-open .icon-mobile-nav[name='menu-outline'] {
+		display: none;
+	}
+
+	.main-nav-list {
+		flex-direction: column;
+		gap: 4.8rem;
+	}
+	.nav-link:link,
+	.nav-link:visited {
+		font-size: 3.2rem;
+	}
+
+	header {
+		position: fixed;
+		width: 100%;
+		background-color: #f5f7fa;
+		z-index: 999;
+	}
+
+	/* MAIN CONTENT */
+	.row {
+		flex-direction: column;
+		gap: 3rem;
+		margin-top: 12rem;
+	}
+
+	.col-2 {
+		width: 100%;
+		padding: 0 2rem;
+		margin-top: 0;
+	}
+
+	.col-2 h1 {
+		text-align: center;
+		font-size: 3.2rem;
+	}
+
+	.single-img {
+		height: auto;
+		width: 100%;
+	}
+	.single-img img {
+		height: auto;
+		object-fit: contain;
+	}
+	.small-img-row {
+		grid-template-columns: repeat(4, 1fr);
+		gap: 1rem;
+	}
+
+	.product-description {
+		padding: 0 1rem;
+		font-size: 1.8rem;
+	}
+
+	.price--wrapper {
+		align-items: center;
+		margin: 3rem 0;
+	}
+
+	.btn {
+		width: 90%;
+		max-width: 40rem;
+		font-size: 2rem;
+		padding: 1.8rem;
+	}
+
+	h3 {
+		text-align: center;
+	}
+
+	/* PAYMENT SECTION */
+	.payments-container {
+		padding: 4rem 2rem;
+		flex-direction: column;
+		gap: 2rem;
+	}
+	.wrap--payments {
+		width: 100%;
+	}
+	.logos-payments-methods {
+		flex-wrap: wrap;
+		gap: 1.5rem;
+	}
+	.logos-payments-methods img {
+		width: 7rem;
+	}
+
+	/* --- FOOTER --- */
+	.footer-container {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 2rem;
+	}
+	.popup-image {
+		display: none !important;
+	}
+}
+
+/* MOBILE < 752px */
+@media (max-width: 47em) {
+	.footer-container {
+		grid-template-columns: 1fr;
+		text-align: center;
+	}
+	.footer-box {
+		align-items: center;
+	}
+	.small-img-row {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+/* < 550px */
+@media (max-width: 34.4em) {
+	.col-2 h1 {
+		font-size: 2.8rem;
+	}
+	.product-price {
+		font-size: 2rem;
+	}
+	.btn {
+		font-size: 1.8rem;
+	}
+	.product-description {
+		font-size: 1.6rem;
+	}
+	.logos-payments-methods img {
+		width: 6rem;
+	}
+}
+/* *************************************** */
+/* WARNING BANNER - RESPONSIVENESS */
+/* *************************************** */
+
+/* < 1344px*/
+@media (max-width: 84em) {
+    .warning-banner {
+        width: 110rem;
+    }
+}
+
+/* < 944px */
+@media (max-width: 59em) {
+    .warning-banner {
+        width: 90vw;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .warning-banner-content {
+        padding: 2.4rem;
+    }
+
+    .warning-banner-content h1 {
+        font-size: 2.8rem;
+        margin-bottom: 2rem;
+    }
+
+    .warning-banner-content p {
+        font-size: 1.8rem;
+    }
+
+    .warning-banner button {
+        font-size: 1.8rem;
+        padding: 1.4rem 2.8rem;
+    }
+}
+
+/* < 600px */
+@media (max-width: 37.5em) {
+    .warning-banner-content {
+        padding: 2rem;
+    }
+
+    .warning-banner-content h1 {
+        font-size: 2.4rem;
+        line-height: 1.2;
+    }
+
+    .warning-banner-content p {
+        font-size: 1.6rem;
+        line-height: 1.6;
+    }
+    
+    .warning-banner button {
+        width: 80%;
+        font-size: 1.6rem;
+        padding: 1.6rem;
+    }
+
+    .test-card {
+        font-size: 1.8rem;
+        word-break: break-all;
+    }
+}

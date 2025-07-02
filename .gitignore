@@ -1,0 +1,22 @@
+# .gitignore
+
+# Node modules
+node_modules/
+
+# Env file
+.env
+
+# Logs
+logs
+*.log
+
+# Optional npm cache directory
+.npm
+
+# Build artifacts
+dist/
+build/
+
+# OS-specific files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful!</title>
+
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: #3498db;
+            margin-top: 10rem;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Payment Successful!</h1>
+    <p>Thank you for purchasing from Ever Bloom. <a class="nav-link" href="index.html#shop">Shop</a>.</p>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const sessionId = urlParams.get('session_id');
+        fetch('http://localhost:3000/success?session_id=' + sessionId)
+            .then(response => response.text())
+            .then(data => console.log(data));
+    </script>
+</body>
+
+</html>
