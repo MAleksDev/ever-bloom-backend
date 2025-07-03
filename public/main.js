@@ -181,3 +181,11 @@ const observer = new IntersectionObserver(
 	}
 )
 observer.observe(heroSectionEl)
+
+//  EVENT PREVRNT SCROLL FOOTER SOCIAL MEDIA
+const noScrollLinks = document.querySelectorAll('.no-scroll-link');
+noScrollLinks.forEach(function(link) {
+    link.addEventListener('click', function(event) {
+        event.preventDefault();
+    });
+});

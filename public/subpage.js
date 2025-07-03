@@ -459,3 +459,11 @@ if (btnLeft) {
 if (btnRight) {
     btnRight.addEventListener('click', () => slider('right'))
 }
+
+//  EVENT PREVRNT SCROLL FOOTER SOCIAL MEDIA
+const noScrollLinks = document.querySelectorAll('.no-scroll-link');
+noScrollLinks.forEach(function(link) {
+    link.addEventListener('click', function(event) {
+        event.preventDefault();
+    });
+});
