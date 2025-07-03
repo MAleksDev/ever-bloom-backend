@@ -62,7 +62,7 @@ const functionCreateProductCard = function () {
 			productInfo.dataset.index = newIndex
 			priceBox.append(productInfo)
 
-			// Handling clicking the "more info" button 
+			// Handling clicking the "more info" button
 			productInfo.addEventListener('click', () => {
 				const clickedIndex = productInfo.dataset.index
 				window.open(`violet-product.html?id=${clickedIndex}`)
@@ -86,10 +86,8 @@ functionCreateProductCard()
 // window.addEventListener('resize', checkContainerWidth)
 // window.addEventListener('load', checkContainerWidth)
 
-
 // Gallery
 const photographs = [
-	
 	'img/everbloom--img/Ever-Bloom--hero.05.jpg',
 	'img/everbloom--img/Ever-Bloom--hero.06.jpg',
 	'img/everbloom--img/Ever-Bloom--hero.11.jpg',
@@ -108,7 +106,8 @@ const gallery = document.querySelector('.gallery-img')
 photographs.forEach(photo => {
 	const galleryImg = document.createElement('img')
 	galleryImg.src = photo
-	galleryImg.alt = 'Gallery photo. A beautifully crafted item from EverBloom, showcasing our passion for creativity and sustainability. Each piece, from intricate jewelry to bespoke home decor, is handcrafted with love using sustainable materials to inspire joy and individuality.'
+	galleryImg.alt =
+		'Gallery photo. A beautifully crafted item from EverBloom, showcasing our passion for creativity and sustainability. Each piece, from intricate jewelry to bespoke home decor, is handcrafted with love using sustainable materials to inspire joy and individuality.'
 	galleryImg.loading = 'lazy'
 	gallery.append(galleryImg)
 })
@@ -140,8 +139,6 @@ document.querySelector('#contact-form').addEventListener('submit', function (eve
 const yearElement = document.querySelector('.year')
 const currentYear = new Date().getFullYear()
 yearElement.textContent = currentYear
-
-
 
 // Mobile navigation
 const mainNav = document.querySelector('.main-nav')
@@ -183,9 +180,9 @@ const observer = new IntersectionObserver(
 observer.observe(heroSectionEl)
 
 //  EVENT PREVRNT SCROLL FOOTER SOCIAL MEDIA
-const noScrollLinks = document.querySelectorAll('.no-scroll-link');
-noScrollLinks.forEach(function(link) {
-    link.addEventListener('click', function(event) {
-        event.preventDefault();
-    });
-});
+const noScrollLinks = document.querySelectorAll('.no-scroll-link')
+noScrollLinks.forEach(function (link) {
+	link.addEventListener('click', function (event) {
+		event.preventDefault()
+	})
+})
