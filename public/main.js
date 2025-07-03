@@ -1,4 +1,4 @@
-// The functionCreateProductCard dynamically creates product cards in a .container-grid container, generating the appropriate HTML elements (such as images, names, prices, and buttons), and assigns a click event to the "more info" button, which opens the product details page in a new tab.
+// FunctionCreateProductCard dynamically.
 
 const functionCreateProductCard = function () {
 	const productsContainer = document.querySelector('.container-grid')
@@ -72,19 +72,6 @@ const functionCreateProductCard = function () {
 }
 
 functionCreateProductCard()
-
-// const checkContainerWidth = function () {
-// 	const headerBox = document.querySelector('.header')
-// 	const floatImg = document.querySelector('.float-img')
-
-// 	if (headerBox.offsetWidth <= 980 || headerBox.offsetHeight <= 750) {
-// 		floatImg.style.display ='none'
-// 	} else {
-// 		floatImg.style.display = 'block'
-// 	}
-// }
-// window.addEventListener('resize', checkContainerWidth)
-// window.addEventListener('load', checkContainerWidth)
 
 // Gallery
 const photographs = [

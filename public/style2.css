@@ -716,7 +716,7 @@ address p:first-child {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	gap: 0.5rem;
+	gap: 2rem;
 	list-style: none;
 	line-height: 1.4;
 }

@@ -306,8 +306,8 @@ h3 {
 	margin: 8.6rem auto;
 	display: flex;
 	padding: 4rem;
-	border-top: #e5dbff 1px solid;
-	border-bottom: #e5dbff 1px solid;
+	border-top: rgba(52, 152, 219, 0.261) 1px solid;
+	border-bottom: rgba(52, 152, 219, 0.261) 1px solid;
 }
 
 .wrap--payments {
@@ -500,7 +500,7 @@ address p:first-child {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	gap: 0.5rem;
+	gap: 2rem;
 	list-style: none;
 	line-height: 1.4;
 }

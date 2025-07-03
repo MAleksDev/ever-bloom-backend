@@ -30,8 +30,6 @@ app.get('/config', (req, res) => {
         res.status(500).send({ error: 'Internal server error.' });
     }
 });
-// --- KONIEC NOWEGO KODU - ENDPOINT /config ---
-
 
 // ENDPOINT: Pobieranie danych produktu po ID (np. z URL `?id=2`)
 // Na podstawie zdjęcia Airtable, pole ID to 'ID Product'.
@@ -45,11 +43,10 @@ app.get('/product-by-id', async (req, res) => {
     }
 
     try {
-        // Używamy filterByFormula do znalezienia rekordu na podstawie pola 'ID Product'
-        // Nazwa pola "{ID Product}" została potwierdzona na podstawie Twojego zdjęcia Airtable.
+    
         const records = await base('Products')
             .select({
-                filterByFormula: `{ID Product} = "${productId}"`, // Używa nazwy pola 'ID Product'
+                filterByFormula: `{ID Product} = "${productId}"`,
                 maxRecords: 1,
             })
             .firstPage()
@@ -61,21 +58,15 @@ app.get('/product-by-id', async (req, res) => {
 
         const record = records[0] // Pobierz pierwszy (i jedyny) znaleziony rekord
 
-        // Zwróć dane produktu w formacie, który oczekuje frontend
-        // Nazwy pól zostały dostosowane do nazw widocznych na zdjęciu Airtable.
         const productData = {
             id: record.id, // To jest wewnętrzny ID rekordu Airtable (np. recXXXXXXXX)
             name: record.fields['Product Name'],
             price: record.fields['Price'],
             description: record.fields['Description'],
-            // Pole obrazka to 'Image' w Airtable, jest to załącznik (array).
-            // Dodano sprawdzenie `.length > 0` dla bezpieczeństwa.
             img:
                 record.fields['Image'] && record.fields['Image'].length > 0
                     ? record.fields['Image'][0].url
                     : 'https://placehold.co/600x400/cccccc/000000?text=No+Image',
-            // Jeśli masz więcej niż jeden obrazek per produkt w Airtable w polu 'Image',
-            // ta linia mapuje wszystkie URL-e. Jeśli 'Image' to zawsze jeden obrazek, nadal będzie działać.
             images:
                 record.fields['Image'] && record.fields['Image'].length > 0 ? record.fields['Image'].map(img => img.url) : [],
             stock: record.fields['Stock'],
@@ -107,7 +98,7 @@ app.post('/check-stock', async (req, res) => {
 
     // Nazwa pola dla nazwy produktu to 'Product Name' zgodnie ze zdjęciem Airtable.
     const filterFormula = `{Product Name} = "${product}"`
-    console.log(`Airtable filter formula for stock check: ${filterFormula}`) // Zmieniono log
+    console.log(`Airtable filter formula for stock check: ${filterFormula}`)
 
     try {
         const records = await base('Products')
@@ -117,17 +108,16 @@ app.post('/check-stock', async (req, res) => {
             })
             .firstPage()
 
-        console.log(`Airtable response records count for stock check: ${records.length}`) // Zmieniono log
+        console.log(`Airtable response records count for stock check: ${records.length}`)
         if (records.length > 0) {
-            console.log('Found record for stock check:', records[0].fields) // Zmieniono log
+            console.log('Found record for stock check:', records[0].fields)
         }
 
         if (records.length === 0) {
             console.log('Produkt nie znaleziony w Airtable do sprawdzenia stanu:', product) // Zmieniono log
-            return res.status(404).json({ error: 'Produkt nie znaleziony' }) // Usunięto kropkę, aby pasowało do frontendu
+            return res.status(404).json({ error: 'Produkt nie znaleziony' })
         }
 
-        // Nazwa pola dla stanu magazynowego to 'Stock' zgodnie ze zdjęciem Airtable.
         const stock = records[0].fields.Stock || 0
         console.log('Stan magazynowy dla', product, ':', stock)
         res.json({ stock })
@@ -148,7 +138,6 @@ app.post('/create-checkout-session', async (req, res) => {
     }
 
     try {
-        // Nazwa pola dla nazwy produktu to 'Product Name' zgodnie ze zdjęciem Airtable.
         const records = await base('Products')
             .select({
                 filterByFormula: `{Product Name} = "${product}"`,
@@ -161,7 +150,6 @@ app.post('/create-checkout-session', async (req, res) => {
             return res.status(404).json({ error: 'Produkt nie znaleziony.' })
         }
 
-        // Nazwa pola dla stanu magazynowego to 'Stock' zgodnie ze zdjęciem Airtable.
         const stock = records[0].fields.Stock || 0
         if (stock <= 0) {
             console.log('Produkt niedostępny w magazynie:', product)
@@ -216,11 +204,9 @@ app.get('/success', async (req, res) => {
         console.log('PaymentIntent status:', paymentIntent.status)
 
         if (paymentIntent.status === 'succeeded') {
-            // Zmieniona logika pobierania nazwy produktu z sesji Stripe
-            let productName = 'Unknown Product' // Domyślna wartość
+            let productName = 'Unknown Product'
             if (session.line_items && session.line_items.data && session.line_items.data.length > 0) {
-                // Preferuj nazwę z product_data, jeśli jest dostępna
-                productName = session.line_items.data[0].price?.product_data?.name || session.line_items.data[0].description // Użyj description jako fallback
+                productName = session.line_items.data[0].price?.product_data?.name || session.line_items.data[0].description
             }
 
             console.log('Produkt dla zamówienia (z sesji Stripe):', productName)
@@ -247,24 +233,21 @@ app.get('/success', async (req, res) => {
                 console.log('Zapisano do Airtable – Zamówienia')
             } catch (airtableCreateError) {
                 console.error('Błąd podczas tworzenia rekordu zamówienia w Airtable:', airtableCreateError.message)
-                // Zwróć błąd serwera, ale nie przerywaj całkowicie, aby spróbować zaktualizować stan magazynowy
-                // Możesz zdecydować, czy chcesz tu zatrzymać i zwrócić błąd 500
-                // return res.status(500).send('Błąd: Nie udało się zapisać zamówienia w Airtable: ' + airtableCreateError.message);
             }
 
             const filterFormula = `{Product Name} = "${productName}"`
-            console.log(`Filter formula for stock update: ${filterFormula}`) // Dodatkowe logowanie formuły filtrowania
+            console.log(`Filter formula for stock update: ${filterFormula}`) 
 
-            const productRecords = await base('Products') // Upewnij się, że 'Products' to poprawna nazwa tabeli
+            const productRecords = await base('Products') 
                 .select({
-                    filterByFormula: filterFormula, // Nazwa pola to 'Product Name' zgodnie ze zdjęciem Airtable.
+                    filterByFormula: filterFormula, 
                     maxRecords: 1,
                 })
                 .firstPage()
 
             if (productRecords.length > 0) {
                 const recordId = productRecords[0].id
-                const currentStock = productRecords[0].fields.Stock || 0 // POPRAWIONO: Używamy productRecords[0].fields.Stock
+                const currentStock = productRecords[0].fields.Stock || 0 
 
                 console.log(`Aktualny stan magazynowy dla "${productName}": ${currentStock}`) // Logowanie aktualnego stanu
                 const newStock = Math.max(0, currentStock - 1) // Upewnij się, że stan nie spadnie poniżej zera
@@ -277,10 +260,9 @@ app.get('/success', async (req, res) => {
                     console.log('Stan magazynowy zaktualizowany dla:', productName, 'na', newStock) // Logowanie nowego stanu
                 } catch (airtableUpdateError) {
                     console.error('Błąd podczas aktualizacji stanu magazynowego w Airtable:', airtableUpdateError.message)
-                    // Możesz zdecydować, czy chcesz tu zatrzymać i zwrócić błąd 500
                 }
             } else {
-                console.warn('Ostrzeżenie: Produkt nie znaleziony w tabeli Products do aktualizacji stanu:', productName) // Zmieniono na warn
+                console.warn('Ostrzeżenie: Produkt nie znaleziony w tabeli Products do aktualizacji stanu:', productName)
             }
         } else {
             console.log('Płatność nie zakończona sukcesem dla sesji:', sessionId, 'Status:', paymentIntent.status)

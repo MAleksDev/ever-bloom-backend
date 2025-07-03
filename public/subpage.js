@@ -1,11 +1,10 @@
-// Deklaracja zmiennej stripe na zewnątrz, aby była dostępna globalnie
 let stripe
 
 // Funkcja do inicjalizacji Stripe po pobraniu klucza z serwera
 async function initializeStripe() {
     try {
         console.log('Initializing Stripe: Fetching public key from /config')
-        // POPRAWIONO: Prawidłowy adres URL do endpointu /config na Renderze
+        // adres URL do endpointu /config na Renderze
         const response = await fetch('https://ever-bloom-backend.onrender.com/config')
         if (!response.ok) {
             throw new Error(`Failed to fetch Stripe config: ${response.status} - ${response.statusText}`)
@@ -18,15 +17,15 @@ async function initializeStripe() {
 
         stripe = Stripe(publishableKey) // Inicjalizuj Stripe z pobranym kluczem
         console.log('Stripe initialized successfully with public key.')
-        checkStock() // Wywołaj funkcję checkStock po zainicjalizowaniu Stripe
+        checkStock()
     } catch (error) {
         console.error('Error initializing Stripe:', error)
-        // Wyświetl błąd użytkownikowi lub zablokuj funkcje płatności
+       
         const buyButton = document.querySelector('.buy-btn')
         if (buyButton) {
             buyButton.disabled = true
             buyButton.textContent = 'Błąd Stripe'
-            buyButton.style.backgroundColor = '#dc3545' // Czerwony kolor dla błędu
+            buyButton.style.backgroundColor = '#dc3545'
         }
     }
 }
@@ -51,9 +50,7 @@ btnMobileNav.addEventListener('click', function () {
 // === Logika Stripe i sprawdzania stanu magazynowego ===
 const buyButton = document.querySelector('.buy-btn') // Ta linia pozostaje
 
-// Funkcja do sprawdzania stanu magazynowego na serwerze
 async function checkStock() {
-    // Sprawdzamy, czy stripe jest zainicjalizowany zanim zaczniemy operacje
     if (!stripe) {
         console.warn('CheckStock: Stripe not yet initialized. Skipping stock check.')
         return
@@ -68,7 +65,6 @@ async function checkStock() {
     }
 
     try {
-        // TEN FRAGMENT BYŁ JUŻ POPRAWNY
         const response = await fetch('https://ever-bloom-backend.onrender.com/check-stock', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -121,7 +117,7 @@ buyButton.addEventListener('click', async () => {
     console.log('Clicked Buy: Dane z przycisku:', { product, price })
 
     try {
-        // POPRAWIONO: Prawidłowy adres URL do endpointu /create-checkout-session na Renderze
+        // adres URL do endpointu /create-checkout-session na Renderze
         const response = await fetch('https://ever-bloom-backend.onrender.com/create-checkout-session', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -157,7 +153,7 @@ async function uploadProduct(idProduct) {
 
     try {
         console.log(`UploadProduct: Próbuję pobrać dane produktu z Airtable dla ID: ${idProduct}`)
-        // POPRAWIONO: Prawidłowy adres URL do endpointu /product-by-id na Renderze
+        // adres URL do endpointu /product-by-id na Renderze
         const response = await fetch(`https://ever-bloom-backend.onrender.com/product-by-id?id=${idProduct}`)
 
         if (!response.ok) {
@@ -182,16 +178,11 @@ async function uploadProduct(idProduct) {
             return null
         }
 
-        // --- Kluczowa zmiana: Łączenie danych z products.js ---
-        // Znajdź produkt w lokalnej tablicy `products` (z `products.js`)
-        // Pamiętaj: 'products' musi być załadowane globalnie w osobnym skrypcie przed tym plikiem,
-        // jeśli 'products.js' to osobny plik, np. <script src="products.js"></script>
         const localProductData =
             typeof products !== 'undefined' ? products.find(p => p.id === parseInt(idProduct, 10)) : null
 
         if (!localProductData) {
             console.error('UploadProduct: Brak danych produktu w lokalnym pliku products.js dla ID:', idProduct)
-            // Nadal możesz wyświetlić dane z Airtable, ale bez obrazków
             combinedProductData = {
                 ...airtableProduct,
                 img: 'https://placehold.co/600x400/cccccc/000000?text=Brak+obrazka',
@@ -201,9 +192,9 @@ async function uploadProduct(idProduct) {
             // Połącz dane z Airtable z danymi obrazków z products.js
             combinedProductData = {
                 ...airtableProduct, // Wszystkie dane z Airtable (ID, nazwa, cena, opis, stock)
-                img: localProductData.img, // Obrazek główny z products.js
-                images: localProductData.images, // Galeria obrazków z products.js
-                description: localProductData.description, // Możesz też nadpisać opis, jeśli jest bardziej szczegółowy w products.js
+                img: localProductData.img,
+                images: localProductData.images, 
+                description: localProductData.description,
             }
         }
 
@@ -239,12 +230,9 @@ async function uploadProduct(idProduct) {
             console.log('UploadProduct: Ustawiono dane przycisku:', buyButton.dataset.product, buyButton.dataset.price)
         }
 
-        // Wywołaj checkStock() po załadowaniu danych produktu i zainicjowaniu Stripe
-        // InitializeStripe już wywołuje checkStock, więc tutaj nie musimy, ale upewnijmy się
         if (stripe) {
             checkStock()
         } else {
-            // Jeśli stripe nie jest zainicjowany, poczekaj na jego inicjalizację
             console.log('Stripe not yet initialized after product upload, checkStock will run once it is.')
         }
         return combinedProductData // Zwróć połączone dane
@@ -291,7 +279,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 })
 
-// Funkcja imageClick została zmodyfikowana, aby przyjmować obiekt `product` bezpośrednio (z Airtable)
+// Funkcja imageClick
 const imageClick = function (product) {
     const smallImageRow = document.querySelector('.small-img-row')
     const singleImg = document.querySelector('.single-img') // Główny kontener obrazka
@@ -320,9 +308,8 @@ const imageClick = function (product) {
 
     // Generowanie małych obrazków pod głównym obrazkiem
     if (smallImageRow && product && product.images && Array.isArray(product.images) && product.images.length > 0) {
-        smallImageRow.innerHTML = '' // Wyczyść, aby uniknąć duplikatów
+        smallImageRow.innerHTML = ''
         product.images.forEach(photoUrl => {
-            // Iteruj przez URL-e w tablicy product.images
             const createImg = document.createElement('img')
             createImg.src = photoUrl
             createImg.alt = product.name
@@ -347,12 +334,10 @@ const imageClick = function (product) {
     }
 }
 
-// Funkcja slidera "Zobacz także" - nadal zależy od globalnej tablicy `products` z `products.js`.
 const subpageSection = document.querySelector('.subpage')
 const subSlider = document.querySelector('.slider')
 
 const createImgSub = function () {
-    // Dodano sprawdzenie, czy 'products' jest zdefiniowane, zanim spróbujemy go użyć
     if (typeof products === 'undefined' || !Array.isArray(products) || products.length === 0) {
         console.warn(
             'CreateImgSub: Globalna tablica `products` (z products.js) nie jest dostępna lub jest pusta. Nie można utworzyć slidera "Zobacz także".'
@@ -383,9 +368,9 @@ const createImgSub = function () {
     }
 }
 
-createImgSub() // Wywołaj funkcję do tworzenia slidera
+createImgSub()
 
-// ********************* POPUP IMAGE  **********
+//  POPUP IMAGE
 
 const createPopupImage = function () {
     const singleImgDiv = document.querySelector('.single-img')
@@ -429,7 +414,7 @@ const createPopupImage = function () {
 
 createPopupImage()
 
-///// Function Slider (dla małych obrazków w produkcie) //////////////////////////////////////////
+// Function Slider
 let currentIndex = 0
 
 function slider(direction) {
