@@ -252,6 +252,7 @@ FONT SIZE SYSTEM (px)
 	margin-right: 1rem;
 	background-color: transparent;
 	border-radius: 50%;
+	color: #3498db;
 }
 
 .more-info:hover {
@@ -778,4 +779,18 @@ address p:first-child {
 	z-index: 1000;
 	font-size: 14px;
 	box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+}
+
+#cookie-banner a {
+color: #3498db;
+}
+
+.cookie-buttons {
+	padding-top: 0.5rem;
+
+}
+
+.cookie-btn{
+	padding: 0.5rem;
+	border-radius: 1rem;
 }
