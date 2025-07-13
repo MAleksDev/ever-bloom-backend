@@ -48,7 +48,7 @@ btnMobileNav.addEventListener('click', function () {
 })
 
 // === Logika Stripe i sprawdzania stanu magazynowego ===
-const buyButton = document.querySelector('.buy-btn') // Ta linia pozostaje
+const buyButton = document.querySelector('.buy-btn') 
 
 async function checkStock() {
     if (!stripe) {

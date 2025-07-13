@@ -171,9 +171,14 @@ app.post('/create-checkout-session', async (req, res) => {
                 },
             ],
             mode: 'payment',
-            success_url: `${req.headers.origin}/success.html?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${req.headers.origin}/cancel.html`,
+            // success_url: `${req.headers.origin}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+            // cancel_url: `${req.headers.origin}/cancel.html`,
+            success_url: `https://ever-bloom-backend.onrender.com/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `https://ever-bloom-backend.onrender.com/cancel`,
             locale: 'en',
+            metadata: {
+            product: product,
+    },
         })
 
         console.log('Sesja Stripe utworzona pomyślnie. ID:', session.id)
@@ -204,10 +209,12 @@ app.get('/success', async (req, res) => {
         console.log('PaymentIntent status:', paymentIntent.status)
 
         if (paymentIntent.status === 'succeeded') {
-            let productName = 'Unknown Product'
-            if (session.line_items && session.line_items.data && session.line_items.data.length > 0) {
-                productName = session.line_items.data[0].price?.product_data?.name || session.line_items.data[0].description
-            }
+            // let productName = 'Unknown Product'
+            // if (session.line_items && session.line_items.data && session.line_items.data.length > 0) {
+            //     productName = session.line_items.data[0].price?.product_data?.name || session.line_items.data[0].description
+            // }
+            const productName = session.metadata?.product || 'Unknown Product'
+
 
             console.log('Produkt dla zamówienia (z sesji Stripe):', productName)
 
@@ -288,4 +295,72 @@ app.use(function (req, res, next) {
 
 // Uruchamianie serwera
 const PORT = process.env.PORT || 3000
+
+const bodyParser = require('body-parser')
+
+// STRIPE: Webhook endpoint (important to use raw body for signature verification)
+app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (req, res) => {
+    const sig = req.headers['stripe-signature']
+
+    let event
+    try {
+        event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET)
+    } catch (err) {
+        console.error('❌ Webhook signature verification failed:', err.message)
+        return res.status(400).send(`Webhook Error: ${err.message}`)
+    }
+
+    // Obsługa zdarzenia typu "checkout.session.completed"
+    if (event.type === 'checkout.session.completed') {
+        const session = event.data.object
+        console.log('✅ Webhook: Payment successful session received:', session.id)
+
+        try {
+            // Pobierz dane line_items (np. nazwę produktu)
+            const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 1 })
+            const item = lineItems.data[0]
+            const productName = item.description || 'Unknown Product'
+            const amountTotal = session.amount_total || 0
+
+            console.log(`Webhook: Produkt = "${productName}", Kwota = ${amountTotal}`)
+
+            // 1. Zapisz zamówienie w Airtable
+            await base('Zamówienia').create({
+                'ID zamówienia': session.payment_intent,
+                Produkt: productName,
+                Kwota: amountTotal,
+                Data: new Date().toISOString(),
+                Status: 'Zakończone',
+            })
+
+            // 2. Zaktualizuj stan magazynowy
+            const records = await base('Products')
+                .select({ filterByFormula: `{Product Name} = "${productName}"`, maxRecords: 1 })
+                .firstPage()
+
+            if (records.length > 0) {
+                const recordId = records[0].id
+                const stock = records[0].fields.Stock || 0
+                const newStock = Math.max(0, stock - 1)
+
+                await base('Products').update(recordId, { Stock: newStock })
+                console.log(`Webhook: Zaktualizowano stan magazynowy "${productName}" na ${newStock}`)
+            } else {
+                console.warn(`Webhook: Produkt "${productName}" nie znaleziony w bazie do aktualizacji stanu`)
+            }
+
+            res.status(200).send('Webhook processed successfully.')
+        } catch (err) {
+            console.error('❌ Błąd podczas przetwarzania webhooka:', err.message)
+            res.status(500).send('Webhook processing error')
+        }
+    } else {
+        // Obsłuż inne zdarzenia, jeśli potrzebujesz
+        console.log(`ℹ️ Webhook: Ignored event type ${event.type}`)
+        res.status(200).send('Event ignored.')
+    }
+})
+
+
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
