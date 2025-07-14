@@ -25,19 +25,45 @@
         a:hover {
             text-decoration: underline;
         }
+
+        .info {
+            margin-top: 2rem;
+        }
     </style>
 </head>
 
 <body>
     <h1>Payment Successful!</h1>
     <p>Thank you for purchasing from Ever Bloom. <a class="nav-link" href="index.html#shop">Shop</a>.</p>
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const sessionId = urlParams.get('session_id');
-        fetch('http://localhost:3000/success?session_id=' + sessionId)
-            .then(response => response.text())
-            .then(data => console.log(data));
-    </script>
+     <div class="info">
+    <p>Product: <strong id="product">Landing…</strong></p>
+    <p>Amount paid: <strong id="amount">Landing…</strong></p>
+  </div>
+
+
+   <script>
+    const urlParams = new URLSearchParams(window.location.search)
+    const sessionId = urlParams.get('session_id')
+
+    if (sessionId) {
+      fetch(`/api/session-details?session_id=${sessionId}`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('product').textContent = data.product || 'Unknown'
+          document.getElementById('amount').textContent = data.amount
+            ? `£${(data.amount / 100).toFixed(2)}`
+            : 'Unknown'
+        })
+        .catch(err => {
+          console.error('Error getting session data:', err)
+          document.getElementById('product').textContent = 'Error'
+          document.getElementById('amount').textContent = 'Error'
+        })
+    } else {
+      document.getElementById('product').textContent = 'No session_id'
+      document.getElementById('amount').textContent = 'lack'
+    }
+  </script>
 </body>
 
 </html>

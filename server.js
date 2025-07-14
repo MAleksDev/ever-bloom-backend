@@ -81,13 +81,13 @@ app.get('/product-by-id', async (req, res) => {
                 .status(400)
                 .json({
                     error:
-                        'Nieprawidłowa nazwa pola w zapytaniu do Airtable. Sprawdź nazwy pól w Airtable (szczególnie "ID Product").',
+                        'Invalid field name in Airtable query. Check field names in Airtable (especially "ID Product").',
                 })
         }
         if (error.message.includes('NOT_FOUND') || error.message.includes('INVALID_RECORD_ID')) {
-            return res.status(404).json({ error: 'Produkt o podanym ID nie istnieje.' })
+            return res.status(404).json({ error: 'The product with the given ID does not exist.' })
         }
-        res.status(500).json({ error: 'Błąd serwera podczas pobierania szczegółów produktu.' })
+        res.status(500).json({ error: 'Server error while retrieving product details.' })
     }
 })
 
@@ -114,27 +114,27 @@ app.post('/check-stock', async (req, res) => {
         }
 
         if (records.length === 0) {
-            console.log('Produkt nie znaleziony w Airtable do sprawdzenia stanu:', product) // Zmieniono log
-            return res.status(404).json({ error: 'Produkt nie znaleziony' })
+            console.log('Product not found in Airtable to check status:', product) // Zmieniono log
+            return res.status(404).json({ error: 'Product not found' })
         }
 
         const stock = records[0].fields.Stock || 0
-        console.log('Stan magazynowy dla', product, ':', stock)
+        console.log('Stock for', product, ':', stock)
         res.json({ stock })
     } catch (error) {
-        console.error('Błąd Airtable w /check-stock:', error.message)
-        res.status(500).json({ error: 'Błąd serwera podczas sprawdzania stanu magazynowego.' })
+        console.error('Airtable error in /check-stock:', error.message)
+        res.status(500).json({ error: 'Server error while checking stock.' })
     }
 })
 
 // ENDPOINT: Tworzenie sesji Stripe z weryfikacją stanu
 app.post('/create-checkout-session', async (req, res) => {
-    console.log('Otrzymano żądanie utworzenia sesji checkout:', req.body)
+    console.log('Request to create a checkout session received:', req.body)
     const { product, price } = req.body
 
     if (!product || !price) {
-        console.error('Błąd: Brakujące dane w żądaniu utworzenia sesji checkout:', req.body)
-        return res.status(400).json({ error: 'Brak produktu lub ceny.' })
+        console.error('Error: Missing data in session creation request checkout:', req.body)
+        return res.status(400).json({ error: 'No product or price.' })
     }
 
     try {
@@ -146,14 +146,14 @@ app.post('/create-checkout-session', async (req, res) => {
             .firstPage()
 
         if (records.length === 0) {
-            console.log('Produkt nie znaleziony w Airtable podczas tworzenia sesji:', product)
-            return res.status(404).json({ error: 'Produkt nie znaleziony.' })
+            console.log('Product not found in Airtable when creating session:', product)
+            return res.status(404).json({ error: 'Product not found.' })
         }
 
         const stock = records[0].fields.Stock || 0
         if (stock <= 0) {
-            console.log('Produkt niedostępny w magazynie:', product)
-            return res.status(400).json({ error: 'Produkt niedostępny.' })
+            console.log('Product unavailable in stock:', product)
+            return res.status(400).json({ error: 'Product unavailable.' })
         }
 
         const session = await stripe.checkout.sessions.create({
@@ -181,29 +181,29 @@ app.post('/create-checkout-session', async (req, res) => {
     },
         })
 
-        console.log('Sesja Stripe utworzona pomyślnie. ID:', session.id)
+        console.log('Stripe session created successfully. ID:', session.id)
         res.json({ id: session.id })
     } catch (error) {
-        console.error('Błąd Stripe podczas tworzenia sesji:', error.message)
-        res.status(500).json({ error: 'Błąd tworzenia sesji: ' + error.message })
+        console.error('Stripe error creating session:', error.message)
+        res.status(500).json({ error: 'Error creating session: ' + error.message })
     }
 })
 
 // ENDPOINT: Sukces płatności – zapis zamówienia i aktualizacja stanu
 app.get('/success', async (req, res) => {
     const sessionId = req.query.session_id
-    console.log('Endpoint /success wywołany z sessionId:', sessionId)
+    console.log('Endpoint /success called with sessionId:', sessionId)
 
     if (!sessionId) {
-        console.log('Brak sessionId w zapytaniu /success')
-        return res.status(400).send('Brak ID sesji.')
+        console.log('No sessionId in /success query')
+        return res.status(400).send('No session ID.')
     }
 
     try {
         const session = await stripe.checkout.sessions.retrieve(sessionId, {
             expand: ['line_items'],
         })
-        console.log('Sesja Stripe pobrana:', session.id)
+        console.log('Stripe session downloaded:', session.id)
 
         const paymentIntent = await stripe.paymentIntents.retrieve(session.payment_intent)
         console.log('PaymentIntent status:', paymentIntent.status)
@@ -216,15 +216,15 @@ app.get('/success', async (req, res) => {
             const productName = session.metadata?.product || 'Unknown Product'
 
 
-            console.log('Produkt dla zamówienia (z sesji Stripe):', productName)
+            console.log('Product for order (from Stripe session):', productName)
 
             if (!productName || productName === 'Unknown Product') {
                 // Dodatkowo sprawdzamy, czy nie jest 'Unknown Product'
                 console.error(
-                    'Błąd: Nie udało się pobrać nazwy produktu z sesji Stripe. Sesja line_items:',
+                    'Error: Failed to retrieve product name from Stripe session. Line_items session:',
                     JSON.stringify(session.line_items, null, 2)
                 ) // Logowanie całej struktury
-                return res.status(500).send('Błąd: Nie udało się zidentyfikować produktu po płatności.')
+                return res.status(500).send('Error: Failed to identify product after payment.')
             }
 
             try {
@@ -237,9 +237,9 @@ app.get('/success', async (req, res) => {
                     Data: new Date().toISOString(),
                     Status: 'Zakończone', // NAJWAŻNIEJSZE: Ta opcja MUSI istnieć w polu Status w Airtable
                 })
-                console.log('Zapisano do Airtable – Zamówienia')
+                console.log('Saved to Airtable – Orders')
             } catch (airtableCreateError) {
-                console.error('Błąd podczas tworzenia rekordu zamówienia w Airtable:', airtableCreateError.message)
+                console.error('Error creating order record in Airtable:', airtableCreateError.message)
             }
 
             const filterFormula = `{Product Name} = "${productName}"`
@@ -256,7 +256,7 @@ app.get('/success', async (req, res) => {
                 const recordId = productRecords[0].id
                 const currentStock = productRecords[0].fields.Stock || 0 
 
-                console.log(`Aktualny stan magazynowy dla "${productName}": ${currentStock}`) // Logowanie aktualnego stanu
+                console.log(`Current stock for "${productName}": ${currentStock}`) // Logowanie aktualnego stanu
                 const newStock = Math.max(0, currentStock - 1) // Upewnij się, że stan nie spadnie poniżej zera
 
                 try {
@@ -264,20 +264,22 @@ app.get('/success', async (req, res) => {
                     await base('Products').update(recordId, {
                         Stock: newStock,
                     })
-                    console.log('Stan magazynowy zaktualizowany dla:', productName, 'na', newStock) // Logowanie nowego stanu
+                    console.log('Stock updated for:', productName, 'na', newStock) // Logowanie nowego stanu
                 } catch (airtableUpdateError) {
-                    console.error('Błąd podczas aktualizacji stanu magazynowego w Airtable:', airtableUpdateError.message)
+                    console.error('Error updating stock in Airtable:', airtableUpdateError.message)
                 }
             } else {
-                console.warn('Ostrzeżenie: Produkt nie znaleziony w tabeli Products do aktualizacji stanu:', productName)
+                console.warn('Warning: Product not found in Products table to update status:', productName)
             }
         } else {
-            console.log('Płatność nie zakończona sukcesem dla sesji:', sessionId, 'Status:', paymentIntent.status)
+            console.log('Payment failed for session:', sessionId, 'Status:', paymentIntent.status)
         }
 
-        res.send('Payment successful! You can return to the shop.')
+        // res.send('Payment successful! You can return to the shop.')
+        res.sendFile(path.join(__dirname, 'public/success.html'))
+
     } catch (error) {
-        console.error('Błąd w endpointcie /success:', error.message)
+        console.error('Error in endpointcie /success:', error.message)
         res.status(500).send('Error processing payment after success: ' + error.message)
     }
 })
@@ -289,8 +291,8 @@ app.get('/cancel', (req, res) => {
 
 // ---- Obsługa błędów 404 (TEN KOD MUSI BYĆ OSTATNI W KOLEJNOŚCI PRZED app.listen) ----
 app.use(function (req, res, next) {
-    console.log(`404 Not Found dla żądania: ${req.method} ${req.url}`)
-    res.status(404).send('Przepraszamy, nie znaleźliśmy tej strony!')
+    console.log(`404 Not Found for request: ${req.method} ${req.url}`)
+    res.status(404).send('Sorry, we could not find this page!')
 })
 
 // Uruchamianie serwera
@@ -322,7 +324,7 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (req, r
             const productName = item.description || 'Unknown Product'
             const amountTotal = session.amount_total || 0
 
-            console.log(`Webhook: Produkt = "${productName}", Kwota = ${amountTotal}`)
+            console.log(`Webhook: Product = "${productName}", Sum = ${amountTotal}`)
 
             // 1. Zapisz zamówienie w Airtable
             await base('Zamówienia').create({
@@ -344,14 +346,14 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (req, r
                 const newStock = Math.max(0, stock - 1)
 
                 await base('Products').update(recordId, { Stock: newStock })
-                console.log(`Webhook: Zaktualizowano stan magazynowy "${productName}" na ${newStock}`)
+                console.log(`Webhook: Stock updated "${productName}" na ${newStock}`)
             } else {
-                console.warn(`Webhook: Produkt "${productName}" nie znaleziony w bazie do aktualizacji stanu`)
+                console.warn(`Webhook: Produkt "${productName}" not found in the database for status update`)
             }
 
             res.status(200).send('Webhook processed successfully.')
         } catch (err) {
-            console.error('❌ Błąd podczas przetwarzania webhooka:', err.message)
+            console.error('❌ Error processing webhook:', err.message)
             res.status(500).send('Webhook processing error')
         }
     } else {
@@ -361,6 +363,29 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (req, r
     }
 })
 
+app.get('/api/session-details', async (req, res) => {
+  const sessionId = req.query.session_id
+  if (!sessionId) return res.status(400).json({ error: 'No session_id' })
+
+  try {
+    const session = await stripe.checkout.sessions.retrieve(sessionId, {
+      expand: ['line_items'],
+    })
+    const paymentIntent = await stripe.paymentIntents.retrieve(session.payment_intent)
+
+    const lineItem = session.line_items.data[0]
+    const productName = lineItem.description || lineItem.price?.product_data?.name || 'Unknown product'
+
+    res.json({
+      product: productName,
+      amount: paymentIntent.amount,
+      status: paymentIntent.status,
+    })
+  } catch (error) {
+    console.error('Error /api/session-details:', error.message)
+    res.status(500).json({ error: 'Failed to retrieve session data' })
+  }
+})
 
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
