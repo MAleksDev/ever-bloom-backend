@@ -65,7 +65,7 @@ const functionCreateProductCard = function () {
 			// Handling clicking the "more info" button
 			productInfo.addEventListener('click', () => {
 				const clickedIndex = productInfo.dataset.index
-				window.open(`violet-product.html?id=${clickedIndex}`)
+				window.open(`ever-bloom.html?id=${clickedIndex}`, '_self')
 			})
 		})
 	}
