@@ -8,7 +8,33 @@ const path = require('path')
 const app = express()
 
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 app.use(cors())
+
+app.get('/api/session-details', async (req, res) => {
+  const sessionId = req.query.session_id
+  if (!sessionId) return res.status(400).json({ error: 'No session_id' })
+
+  try {
+    const session = await stripe.checkout.sessions.retrieve(sessionId, {
+      expand: ['line_items'],
+    })
+    const paymentIntent = await stripe.paymentIntents.retrieve(session.payment_intent)
+
+    const lineItem = session.line_items.data[0]
+    const productName = lineItem.description || lineItem.price?.product_data?.name || 'Unknown product'
+
+    res.json({
+      product: productName,
+      amount: paymentIntent.amount,
+      status: paymentIntent.status,
+    })
+  } catch (error) {
+    console.error('Error /api/session-details:', error.message)
+    res.status(500).json({ error: 'Failed to retrieve session data' })
+  }
+})
+
 app.use(express.static('public')) // Serwuje pliki z katalogu 'public'
 
 // Konfiguracja Airtable
@@ -363,29 +389,7 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (req, r
     }
 })
 
-app.get('/api/session-details', async (req, res) => {
-  const sessionId = req.query.session_id
-  if (!sessionId) return res.status(400).json({ error: 'No session_id' })
 
-  try {
-    const session = await stripe.checkout.sessions.retrieve(sessionId, {
-      expand: ['line_items'],
-    })
-    const paymentIntent = await stripe.paymentIntents.retrieve(session.payment_intent)
-
-    const lineItem = session.line_items.data[0]
-    const productName = lineItem.description || lineItem.price?.product_data?.name || 'Unknown product'
-
-    res.json({
-      product: productName,
-      amount: paymentIntent.amount,
-      status: paymentIntent.status,
-    })
-  } catch (error) {
-    console.error('Error /api/session-details:', error.message)
-    res.status(500).json({ error: 'Failed to retrieve session data' })
-  }
-})
 
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
